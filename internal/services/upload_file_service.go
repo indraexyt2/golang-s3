@@ -4,14 +4,14 @@ import (
 	"context"
 	"io"
 	"os"
-	"s3-go-file-handling/internal/repositories"
+	"s3-go-file-handling/internal/interfaces"
 )
 
 type UploadFileService struct {
-	s3Repository *repositories.S3Repository
+	s3Repository interfaces.IS3Repository
 }
 
-func NewUploadFileService(s3Repository *repositories.S3Repository) *UploadFileService {
+func NewUploadFileService(s3Repository interfaces.IS3Repository) *UploadFileService {
 	return &UploadFileService{
 		s3Repository: s3Repository,
 	}

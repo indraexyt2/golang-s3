@@ -4,14 +4,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"s3-go-file-handling/helpers"
-	"s3-go-file-handling/internal/services"
+	"s3-go-file-handling/internal/interfaces"
 )
 
 type DownloadAPI struct {
-	downloadFileService *services.DownloadFileService
+	downloadFileService interfaces.IDownloadService
 }
 
-func NewDownloadAPI(downloadFileService *services.DownloadFileService) *DownloadAPI {
+func NewDownloadAPI(downloadFileService interfaces.IDownloadService) *DownloadAPI {
 	return &DownloadAPI{
 		downloadFileService: downloadFileService,
 	}

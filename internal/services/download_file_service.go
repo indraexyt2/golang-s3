@@ -3,14 +3,14 @@ package services
 import (
 	"context"
 	"os"
-	"s3-go-file-handling/internal/repositories"
+	"s3-go-file-handling/internal/interfaces"
 )
 
 type DownloadFileService struct {
-	s3Repository *repositories.S3Repository
+	s3Repository interfaces.IS3Repository
 }
 
-func NewDownloadFileService(s3Repository *repositories.S3Repository) *DownloadFileService {
+func NewDownloadFileService(s3Repository interfaces.IS3Repository) *DownloadFileService {
 	return &DownloadFileService{
 		s3Repository: s3Repository,
 	}
