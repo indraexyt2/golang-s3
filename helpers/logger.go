@@ -2,7 +2,24 @@ package helpers
 
 import "github.com/sirupsen/logrus"
 
-var Logger *logrus.Logger
+type ILogger interface {
+	Info(msg string, args ...interface{})
+	Error(msg string, args ...interface{})
+}
+
+type LogrusWrapper struct {
+	logger *logrus.Logger
+}
+
+func (l *LogrusWrapper) Info(msg string, args ...interface{}) {
+	l.Info(msg, args...)
+}
+
+func (l *LogrusWrapper) Error(msg string, args ...interface{}) {
+	l.Error(msg, args...)
+}
+
+var Logger ILogger
 
 func SetupLogger() {
 	logger := logrus.New()
@@ -10,6 +27,6 @@ func SetupLogger() {
 		PrettyPrint: true,
 	})
 
-	Logger = logger
+	Logger = &LogrusWrapper{logger: logger}
 	logger.Info("Setup logger")
 }
