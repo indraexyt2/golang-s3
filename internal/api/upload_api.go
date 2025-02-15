@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"path/filepath"
 	"s3-go-file-handling/helpers"
 	"s3-go-file-handling/internal/interfaces"
+	"strings"
 )
 
 type UploadAPI struct {
@@ -27,6 +29,21 @@ func (api *UploadAPI) UploadFile(c *gin.Context) {
 	if err != nil {
 		log.Info("Error uploading file: ", err)
 		helpers.SendResponse(c, http.StatusBadRequest, "Error uploading file", nil)
+		return
+	}
+
+	allowedExtensions := map[string]bool{
+		".jpg":  true,
+		".jpeg": true,
+		".png":  true,
+		".gif":  true,
+		".webp": true,
+	}
+
+	ext := strings.ToLower(filepath.Ext(file.Filename))
+	if !allowedExtensions[ext] {
+		log.Info("Invalid file type: ", ext)
+		helpers.SendResponse(c, http.StatusBadRequest, "Only image files are allowed", nil)
 		return
 	}
 
