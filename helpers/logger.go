@@ -12,11 +12,11 @@ type LogrusWrapper struct {
 }
 
 func (l *LogrusWrapper) Info(msg string, args ...interface{}) {
-	l.Info(msg, args...)
+	l.logger.Infof(msg, args...)
 }
 
 func (l *LogrusWrapper) Error(msg string, args ...interface{}) {
-	l.Error(msg, args...)
+	l.logger.Errorf(msg, args...)
 }
 
 var Logger ILogger
