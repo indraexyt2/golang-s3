@@ -1,17 +1,18 @@
 package api
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"s3-go-file-handling/helpers"
-	"s3-go-file-handling/internal/services"
+	"s3-go-file-handling/internal/interfaces"
 )
 
 type UploadAPI struct {
-	uploadFileService *services.UploadFileService
+	uploadFileService interfaces.IUploadFileService
 }
 
-func NewUploadAPI(uploadFileService *services.UploadFileService) *UploadAPI {
+func NewUploadAPI(uploadFileService interfaces.IUploadFileService) *UploadAPI {
 	return &UploadAPI{
 		uploadFileService: uploadFileService,
 	}
@@ -20,7 +21,6 @@ func NewUploadAPI(uploadFileService *services.UploadFileService) *UploadAPI {
 func (api *UploadAPI) UploadFile(c *gin.Context) {
 	var (
 		log = helpers.Logger
-		ctx = c.Request.Context()
 	)
 
 	file, err := c.FormFile("file")
@@ -38,8 +38,8 @@ func (api *UploadAPI) UploadFile(c *gin.Context) {
 	}
 	defer fileData.Close()
 
-	objectKey := "uploads/" + file.Filename
-	err = api.uploadFileService.UploadFile(ctx, objectKey, fileData)
+	objectKey := fmt.Sprintf("uploads/%s", file.Filename)
+	err = api.uploadFileService.UploadFile(c.Request.Context(), objectKey, fileData)
 	if err != nil {
 		log.Info("Error uploading file: ", err)
 		helpers.SendResponse(c, http.StatusInternalServerError, "Error uploading file", nil)
